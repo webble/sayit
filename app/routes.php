@@ -11,7 +11,13 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
+
+Route::bind('article', function($slug) {
+	return Article::whereSlug($slug)->firstOrFail();
 });
+
+Route::get('article/{article}', 'ArticleController@show');
+
+Route::resource('article', 'ArticleController');
+
+Route::resource('api.article', 'Api\ArticleController');
