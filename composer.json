@@ -7,13 +7,16 @@
 		"laravel/framework": "4.1.*",
 		"way/generators": "dev-master",
 		"cviebrock/eloquent-sluggable": "1.0.*",
-		"boyhagemann/form": "dev-master"
+		"boyhagemann/form": "dev-master",
+		"rtablada/package-installer": "dev-master",
+		"lucadegasperi/oauth2-server-laravel": "1.x"
 	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
 			"app/controllers",
 			"app/models",
+			"app/repositories",
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"

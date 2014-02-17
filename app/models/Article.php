@@ -18,4 +18,12 @@ class Article extends Eloquent
 		'save_to'    => 'slug',
 		'on_update'  => true,
 	);
+
+	/**
+	 * @return Channel
+	 */
+	public function channel()
+	{
+		return $this->belongsTo('Channel');
+	}
 }

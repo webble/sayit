@@ -2,6 +2,8 @@
 
 namespace Api;
 
+use BaseController, Response, Article, ArticleRepository, View, Input;
+
 class ArticleController extends BaseController {
 
 	/**
@@ -11,7 +13,7 @@ class ArticleController extends BaseController {
 	 */
 	public function index()
 	{
-		$articles = Article::all();
+		$articles = ArticleRepository::buildQueryFromInput()->get()->toArray();
         return Response::json(compact('articles'));
 	}
 
@@ -22,6 +24,15 @@ class ArticleController extends BaseController {
 	 */
 	public function store()
 	{
+		$v = Validator::make(Input::all(), Article::$rules);
+
+		if($v->fails()) {
+			return Response::json(array(
+				'message' => 'Input contains errors',
+				'errors' => $v->messages(),
+			));
+		}
+
 		Article::create(Input::all());
 
 		return Response::json(array('message' => 'Article stored'));
@@ -35,7 +46,7 @@ class ArticleController extends BaseController {
 	 */
 	public function show(Article $article)
 	{
-        return View::make('article.show', compact('article'));
+        return Response::json($article->toArray());
 	}
 
 	/**
@@ -46,6 +57,15 @@ class ArticleController extends BaseController {
 	 */
 	public function update(Article $article)
 	{
+		$v = Validator::make(Input::all(), Article::$rules);
+
+		if($v->fails()) {
+			return Response::json(array(
+				'message' => 'Input contains errors',
+				'errors' => $v->messages(),
+			));
+		}
+
 		$article->update(Input::all());
 
 		return Response::json(array('message' => 'Article updated'));

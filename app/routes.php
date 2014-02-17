@@ -13,9 +13,9 @@
 
 
 Route::bind('article', function($slug) {
-	return Article::where('article.slug', $slug)->firstOrFail();
+	return ArticleRepository::findBySlug($slug);
 });
 
 Route::resource('article', 'ArticleController');
 Route::resource('channel', 'ChannelController');
-Route::resource('api.article', 'Api\ArticleController');
+Route::resource('api/article', 'Api\ArticleController');
