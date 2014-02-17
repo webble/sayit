@@ -109,6 +109,7 @@ return array(
 
 		'Way\Generators\GeneratorsServiceProvider',
 		'Cviebrock\EloquentSluggable\SluggableServiceProvider',
+		'Boyhagemann\Form\FormServiceProvider',
 
 	),
 

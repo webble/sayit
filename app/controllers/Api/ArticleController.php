@@ -22,6 +22,9 @@ class ArticleController extends BaseController {
 	 */
 	public function store()
 	{
+		Article::create(Input::all());
+
+		return Response::json(array('message' => 'Article stored'));
 	}
 
 	/**
@@ -41,9 +44,11 @@ class ArticleController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update(Article $article)
 	{
-		//
+		$article->update(Input::all());
+
+		return Response::json(array('message' => 'Article updated'));
 	}
 
 	/**
@@ -52,9 +57,11 @@ class ArticleController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy(Article $article)
 	{
-		//
+		$article->delete();
+
+		return Response::json(array('message' => 'Article deleted'));
 	}
 
 }
