@@ -13,7 +13,10 @@
 
 
 Route::bind('article', function($slug) {
-	return ArticleRepository::findBySlug($slug);
+
+	return is_numeric($slug)
+	? ArticleRepository::findById($slug)
+	: ArticleRepository::findBySlug($slug);
 });
 
 Route::resource('article', 'ArticleController');

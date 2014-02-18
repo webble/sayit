@@ -84,6 +84,15 @@ class ArticleRepository
 	}
 
 	/**
+	 * @param $id
+	 * @return Article
+	 */
+	public static function findById($id)
+	{
+		return static::buildQueryFromInput()->whereId($id)->firstOrFail();
+	}
+
+	/**
 	 * @param $slug
 	 * @return Article
 	 */
