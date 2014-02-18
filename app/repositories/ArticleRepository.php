@@ -8,6 +8,7 @@ class ArticleRepository
 	public static function buildQueryFromInput()
 	{
 		$q = Article::query();
+		$q->take(100);
 
 		foreach(Input::all() as $key => $value) {
 
@@ -19,7 +20,9 @@ class ArticleRepository
 
 					foreach($with as $relation) {
 
-						if(!in_array($relation, array('channel'))) {
+						$relation = trim($relation);
+						$allowed = array('channel', 'user');
+						if(!in_array($relation, $allowed)) {
 							continue;
 						}
 
@@ -27,9 +30,47 @@ class ArticleRepository
 					}
 					break;
 
+				case 'search':
+					$parts = explode(' ', $value);
+
+					foreach($parts as $part) {
+
+						$part = trim($part);
+						$prefix = substr($part, 0, 1);
+
+						switch($prefix) {
+
+							// Search for a user
+							case '@':
+								$username = substr($part, 1);
+								$q->orWhereHas('user', function($q) use($username) {
+									$q->where('username', $username);
+								});
+								break;
+
+							// Search for a tag
+							case '#':
+								break;
+
+							// Search for a channel
+							case '$':
+								$channel = substr($part, 1);
+								$q->orWhereHas('channel', function($q) use($channel) {
+									$q->where('slug', $channel);
+								});
+								break;
+
+							// Global search terms
+							default:
+
+						}
+
+					}
+
+					break;
 
 				case 'offset':
-					$q->offset($value);
+					$q->skip($value);
 					break;
 
 				case 'limit':
@@ -50,4 +91,14 @@ class ArticleRepository
 	{
 		return static::buildQueryFromInput()->whereSlug($slug)->firstOrFail();
 	}
+
+	/**
+	 * @param $key
+	 * @return Article
+	 */
+	public static function findByKey($key)
+	{
+		return Article::query()->whereKey($key)->first();
+	}
+
 }

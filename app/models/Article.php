@@ -4,7 +4,7 @@ class Article extends Eloquent
 {
 	protected $table = 'article';
 
-	protected $fillable = array('title', 'markdown');
+	protected $fillable = array('title', 'user_id', 'channel_id', 'teaser', 'key', 'markdown', 'html');
 
 	protected $guarded = array('id');
 
@@ -25,5 +25,13 @@ class Article extends Eloquent
 	public function channel()
 	{
 		return $this->belongsTo('Channel');
+	}
+
+	/**
+	 * @return User
+	 */
+	public function user()
+	{
+		return $this->belongsTo('User');
 	}
 }

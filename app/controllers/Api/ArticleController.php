@@ -2,7 +2,7 @@
 
 namespace Api;
 
-use BaseController, Response, Article, ArticleRepository, View, Input;
+use BaseController, Validator, Response, Article, ArticleRepository, View, Input;
 
 class ArticleController extends BaseController {
 
@@ -33,6 +33,14 @@ class ArticleController extends BaseController {
 			));
 		}
 
+		// First try to find an existing article with the same key. If an article is found,
+		// then we can update this article.
+		if(Input::get('key') && ($article = ArticleRepository::findByKey(Input::get('key')))) {
+			return $this->update($article);
+		}
+
+
+		// This is a new article. Save it with the validated input data
 		Article::create(Input::all());
 
 		return Response::json(array('message' => 'Article stored'));

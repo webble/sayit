@@ -19,3 +19,29 @@ Route::bind('article', function($slug) {
 Route::resource('article', 'ArticleController');
 Route::resource('channel', 'ChannelController');
 Route::resource('api/article', 'Api\ArticleController');
+
+
+
+Route::get('/', function() {
+
+	// GET
+//	$response = API::get('http://localhost/sayit/public/api/article?' . http_build_query(array(
+//		'with' => 'user, channel',
+//		'search' => '@boy',
+//	)));
+//	dd($response);
+
+	// POST
+	$response = API::post('http://localhost/sayit/public/api/article', array(
+		'user' => 'boy@swis.nl',
+		'title' => 'Test via remote request',
+		'markdown' =>
+<<<EOT
+# Een test titel
+Gewone tekst
+EOT
+	));
+
+	dd($response);
+
+});

@@ -9,9 +9,9 @@ class ArticleTableSeeder extends Seeder {
 
 		Article::create(array(
 			'title' => 'Test article',
+			'key' => md5('testkey'),
 			'teaser' => 'Teaser text',
-			'markdown' => '## h2 header',
-			'html' => '<h2>h2 header</h2>',
+			'markdown' => '## test header',
 			'user_id' => 1,
 			'channel_id' => 1,
 		));

@@ -21,7 +21,7 @@ class ArticleController extends BaseController {
 	 */
 	public function index()
 	{
-		$articles = Article::all();
+		$articles = Article::with(array('channel', 'user'))->get();
         return View::make('article.index', compact('articles'));
 	}
 
@@ -34,6 +34,7 @@ class ArticleController extends BaseController {
 	{
 		$fb = $this->fb;
 		$fb->text('title')->label('Title')->required();
+		$fb->text('key')->label('Key');
 		$fb->textarea('markdown')->label('Body')->required();
 		$fb->route('article.store');
 		$form = $fb->build();
@@ -54,6 +55,13 @@ class ArticleController extends BaseController {
 			return Redirect::route('article.create')->withError('Input contains errors');
 		}
 
+		// First try to find an existing article with the same key. If an article is found,
+		// then we can update this article.
+		if(Input::get('key') && ($article = ArticleRepository::findByKey(Input::get('key')))) {
+			return $this->update($article);
+		}
+
+		// This is a new article. Save it with the validated input data
 		$article = Article::create(Input::all());
 
 		return Redirect::route('article.show', $article->slug)->withSuccess('Article created');
