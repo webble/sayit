@@ -32,11 +32,11 @@ Route::resource('api/article', 'Api\ArticleController');
 
 
 Route::get('apitest/list-article', function() {
-	return API::get('http://localhost/sayit/public/api/article?' . http_build_query(Input::all()));
+	return View::make('article.index', API::get('http://localhost/sayit/public/api/article?with=user'));
 });
 
 Route::get('apitest/view-article/{slug}', function($slug) {
-	return API::get('http://localhost/sayit/public/api/article/' . $slug . http_build_query(Input::all()));
+	return API::get('http://localhost/sayit/public/api/article/' . $slug . '?' . http_build_query(Input::all()));
 });
 
 Route::get('apitest/create-article', function() {
