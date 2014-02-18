@@ -41,9 +41,12 @@ class ArticleController extends BaseController {
 
 
 		// This is a new article. Save it with the validated input data
-		Article::create(Input::all());
+		$article = Article::create(Input::all());
 
-		return Response::json(array('message' => 'Article stored'));
+		return Response::json(array(
+			'message' => 'Article stored',
+			'article' => $article->toArray(),
+		));
 	}
 
 	/**
@@ -76,7 +79,10 @@ class ArticleController extends BaseController {
 
 		$article->update(Input::all());
 
-		return Response::json(array('message' => 'Article updated'));
+		return Response::json(array(
+			'message' => 'Article updated',
+			'article' => $article->toArray(),
+		));
 	}
 
 	/**

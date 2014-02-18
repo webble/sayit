@@ -22,26 +22,42 @@ Route::resource('api/article', 'Api\ArticleController');
 
 
 
-Route::get('/', function() {
 
-	// GET
-//	$response = API::get('http://localhost/sayit/public/api/article?' . http_build_query(array(
-//		'with' => 'user, channel',
-//		'search' => '@boy',
-//	)));
-//	dd($response);
 
-	// POST
-	$response = API::post('http://localhost/sayit/public/api/article', array(
-		'user' => 'boy@swis.nl',
-		'title' => 'Test via remote request',
-		'markdown' =>
-<<<EOT
-# Een test titel
-Gewone tekst
-EOT
-	));
 
-	dd($response);
+
+
+
+Route::get('apitest/list-article', function() {
+	return API::get('http://localhost/sayit/public/api/article?' . http_build_query(Input::all()));
+});
+
+Route::get('apitest/view-article/{slug}', function($slug) {
+	return API::get('http://localhost/sayit/public/api/article/' . $slug . http_build_query(Input::all()));
+});
+
+Route::get('apitest/create-article', function() {
+
+	$fb = App::make('formbuilder');
+	$fb->url('apitest/store-article');
+	$fb->method('post');
+	$fb->text('title');
+	$fb->text('key');
+	$fb->textarea('markdown');
+	$fb->defaults(Input::old());
+	$fb->errors(Session::get('errors'));
+
+	return $fb->build();
+});
+
+Route::post('apitest/store-article', function() {
+
+	$response = API::post('http://localhost/sayit/public/api/article', Input::all() );
+
+	if(isset($response['errors'])) {
+		return Redirect::to('apitest/create-article')->withErrors($response['errors']);
+	}
+
+	return Redirect::to('apitest/view-article/' . $response['article']['slug']);
 
 });
